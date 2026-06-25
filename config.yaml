@@ -1,0 +1,59 @@
+# Spur.fit LeadGen — ICP config
+# Coaches found here = Spur.fit's target customers (leads).
+
+icp:
+  roles:
+    - "strength training coach"
+    - "strength coach"
+    - "nutritionist"
+    - "nutrition coach"
+    - "fitness coach"
+    - "online fitness coach"
+    - "transformation coach"
+    - "weight loss coach"
+    - "fat loss coach"
+    - "running coach"
+    - "run coach"
+
+  countries:        # ISO-ish tags used for geo match + Google gl param
+    US: ["united states", "usa", "u.s.", "america", "🇺🇸"]
+    UK: ["united kingdom", "uk", "england", "london", "🇬🇧"]
+    CA: ["canada", "🇨🇦", "toronto", "vancouver"]
+    ZA: ["south africa", "🇿🇦", "johannesburg", "cape town"]
+    AU: ["australia", "🇦🇺", "sydney", "melbourne"]
+    NZ: ["new zealand", "🇳🇿", "auckland"]
+
+platforms:
+  - instagram
+  - tiktok
+  - twitter
+  - reddit
+  # linkedin: hardest, off by default (needs Proxycurl)
+
+# Lead scoring -> tags saas_icp (top 10-20%, manages clients)
+#                or growth_icp (bottom 90%, wants clients)
+scoring:
+  follower_sweet_spot: [1000, 100000]   # actually sells coaching
+  saas_icp_min_followers: 5000          # established -> SaaS pitch
+  growth_icp_max_followers: 5000        # hustling -> growth pitch
+  monetization_keywords:
+    - "dm me"
+    - "link in bio"
+    - "book a call"
+    - "apply now"
+    - "coaching"
+    - "1:1"
+    - "online coaching"
+    - "transform"
+    - "client"
+    - "spots open"
+
+# Free-tier API budgets (soft caps, pipeline stops at limit)
+budgets:
+  serpapi_searches: 100    # caps discovery web-search calls
+  contact_searches: 60     # caps per-lead email-finding web searches
+  hunter_lookups: 25
+
+output:
+  db_path: "leads.db"
+  csv_path: "leads_export.csv"

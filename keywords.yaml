@@ -1,0 +1,46 @@
+# Coach types -> keyword phrases shown as checkboxes in the app.
+# Each keyword becomes a SERP query (expanded across the 9 TEMPLATES).
+# Edit freely: add/remove a coach type, or add/remove keywords under one.
+# First keyword in each list is pre-checked in the UI.
+
+Strength training coach:
+  - strength coach
+  - strength training coach
+  - strength and conditioning coach
+  - powerlifting coach
+  - weightlifting coach
+
+Nutritionist:
+  - nutritionist
+  - nutrition coach
+  - sports nutritionist
+  - dietitian
+  - online nutritionist
+
+Fitness coach:
+  - fitness coach
+  - online fitness coach
+  - personal trainer
+  - fitness trainer
+  - womens fitness coach
+
+Transformation coach:
+  - transformation coach
+  - body transformation coach
+  - fitness transformation coach
+  - fat loss coach
+  - online transformation coach
+
+Weight loss coach:
+  - weight loss coach
+  - fat loss coach
+  - weightloss coach
+  - weight loss specialist
+  - weight management coach
+
+Running coach:
+  - running coach
+  - run coach
+  - marathon coach
+  - endurance running coach
+  - online running coach
