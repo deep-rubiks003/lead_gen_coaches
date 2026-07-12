@@ -172,8 +172,10 @@ with c1:
     elif country_name.startswith("🌐"):
         country_name = ""
     city = st.text_input(
-        "City (optional)", placeholder="e.g. Dubai, Mumbai, London",
-        help="Added to the search query as text to bias results to this city.")
+        "City (required for 'Any', optional otherwise)",
+        placeholder="e.g. Dubai, Mumbai, London",
+        help="Added to the search query as text to bias results to this "
+             "city. With country 'Any', leads are saved under the city name.")
     target = st.number_input("Max results", 10, 500, 100, step=10)
 with c2:
     fol = st.slider("Follower range", 0, 2_000_000, (20_000, 100_000),
@@ -203,10 +205,16 @@ if go:
         st.stop()
     coach_type = ", ".join(niches)
     country_name = (country_name or "").strip()
+    city = (city or "").strip()
     is_custom = bool(country_name) and country_name not in COUNTRIES
     if not country_name:
-        # worldwide: no region bias, no geo term
-        gl, label = "us", "GLOBAL"
+        # 'Any' mode: city is required and becomes the save bucket
+        if not city:
+            st.error("City is required when country is 'Any' — leads are "
+                     "saved under the city's name.")
+            st.stop()
+        gl = "us"
+        label = city.upper().replace(" ", "_")[:20]
     elif is_custom:
         # no Google region code for free-text countries -> default gl, and
         # force the name into the query so it actually biases discovery.
@@ -219,8 +227,8 @@ if go:
     geo_bits = []
     if country_name and (geo_in_query or is_custom):
         geo_bits.append(country_name)
-    if city.strip():
-        geo_bits.append(city.strip())
+    if city:
+        geo_bits.append(city)
     geo_term = " ".join(geo_bits)
     nf = no_filter or bool(geo_term)   # geo-in-query loses counts -> no filter
     # strict country match only works for known ISO codes (infer_country
@@ -238,7 +246,7 @@ if go:
             prog.progress(min(len(found) / float(target), 1.0))
         status.write(msg)
 
-    with st.spinner(f"Searching {country_name or 'worldwide'} for "
+    with st.spinner(f"Searching {country_name or city} for "
                     f"'{coach_type}'…"):
         result = harvest(niches, lo, hi, target=int(target), gl=gl,
                          country=label, geo_term=geo_term, no_filter=nf,
