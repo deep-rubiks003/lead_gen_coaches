@@ -13,6 +13,31 @@ from simple_search import harvest
 
 st.set_page_config(page_title="Coach Lead Finder", page_icon="🏋️", layout="wide")
 
+# ---------------- access gate ----------------
+import os
+
+ACCESS_CODE = os.environ.get("ACCESS_CODE", "spurfit_12345_leadgen")
+
+
+def _check_access() -> bool:
+    if st.session_state.get("auth_ok"):
+        return True
+    st.title("🔒 Coach Lead Finder")
+    st.caption("Enter the access code to continue.")
+    entered = st.text_input("Access code", type="password",
+                            key="access_code_input")
+    if st.button("Enter", type="primary"):
+        if entered == ACCESS_CODE:
+            st.session_state.auth_ok = True
+            st.rerun()
+        else:
+            st.error("Wrong code.")
+    return False
+
+
+if not _check_access():
+    st.stop()
+
 
 st.title("🏋️ Coach Lead Finder — Bright Data")
 st.caption("Find Instagram coach/creator accounts by niche, follower range, and "
