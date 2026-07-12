@@ -161,12 +161,16 @@ st.subheader("3 · Target")
 c1, c2 = st.columns(2)
 with c1:
     country_name = st.selectbox(
-        "Country", list(COUNTRIES.keys()) + ["🌍 Custom…"],
+        "Country", ["🌐 Any (worldwide)"] + list(COUNTRIES.keys())
+        + ["🌍 Custom…"],
         help="Pick 'Custom…' to type any country — it will be injected into "
-             "the search query as text.")
+             "the search query as text. 'Any' searches without a country.")
     if country_name == "🌍 Custom…":
         country_name = st.text_input(
-            "Custom country", placeholder="e.g. Singapore, Germany, Nigeria")
+            "Custom country (optional)",
+            placeholder="e.g. Singapore, Germany, Nigeria")
+    elif country_name.startswith("🌐"):
+        country_name = ""
     city = st.text_input(
         "City (optional)", placeholder="e.g. Dubai, Mumbai, London",
         help="Added to the search query as text to bias results to this city.")
@@ -199,11 +203,11 @@ if go:
         st.stop()
     coach_type = ", ".join(niches)
     country_name = (country_name or "").strip()
+    is_custom = bool(country_name) and country_name not in COUNTRIES
     if not country_name:
-        st.error("Enter a custom country (or pick one from the list).")
-        st.stop()
-    is_custom = country_name not in COUNTRIES
-    if is_custom:
+        # worldwide: no region bias, no geo term
+        gl, label = "us", "GLOBAL"
+    elif is_custom:
         # no Google region code for free-text countries -> default gl, and
         # force the name into the query so it actually biases discovery.
         gl = "us"
@@ -213,7 +217,7 @@ if go:
     lo, hi = fol
     # discovery: inject country NAME (and city) into the query as plain text
     geo_bits = []
-    if geo_in_query or is_custom:
+    if country_name and (geo_in_query or is_custom):
         geo_bits.append(country_name)
     if city.strip():
         geo_bits.append(city.strip())
@@ -221,7 +225,8 @@ if go:
     nf = no_filter or bool(geo_term)   # geo-in-query loses counts -> no filter
     # strict country match only works for known ISO codes (infer_country
     # returns codes from config.yaml) — skip it for custom free-text countries.
-    fc = label if (verify and strict_country and not is_custom) else None
+    fc = (label if (verify and strict_country and country_name
+                    and not is_custom) else None)
 
     status = st.empty()
     prog = st.progress(0.0)
@@ -233,7 +238,8 @@ if go:
             prog.progress(min(len(found) / float(target), 1.0))
         status.write(msg)
 
-    with st.spinner(f"Searching {country_name} for '{coach_type}'…"):
+    with st.spinner(f"Searching {country_name or 'worldwide'} for "
+                    f"'{coach_type}'…"):
         result = harvest(niches, lo, hi, target=int(target), gl=gl,
                          country=label, geo_term=geo_term, no_filter=nf,
                          pages=pages, out=None, verify=verify, filter_country=fc,
