@@ -16,10 +16,14 @@ st.set_page_config(page_title="Coach Lead Finder", page_icon="🏋️", layout="
 # ---------------- access gate ----------------
 import os
 
-ACCESS_CODE = os.environ.get("ACCESS_CODE", "spurfit_12345_leadgen")
+ACCESS_CODE = os.environ.get("ACCESS_CODE", "")
 
 
 def _check_access() -> bool:
+    if not ACCESS_CODE:
+        st.error("ACCESS_CODE is not configured — set it in Streamlit "
+                 "secrets.")
+        return False
     if st.session_state.get("auth_ok"):
         return True
     st.title("🔒 Coach Lead Finder")
