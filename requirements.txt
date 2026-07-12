@@ -1,0 +1,7 @@
+streamlit
+pandas
+httpx
+pydantic
+PyYAML
+python-dotenv
+rich
