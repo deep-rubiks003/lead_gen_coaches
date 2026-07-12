@@ -160,7 +160,16 @@ st.divider()
 st.subheader("3 · Target")
 c1, c2 = st.columns(2)
 with c1:
-    country_name = st.selectbox("Country", list(COUNTRIES.keys()))
+    country_name = st.selectbox(
+        "Country", list(COUNTRIES.keys()) + ["🌍 Custom…"],
+        help="Pick 'Custom…' to type any country — it will be injected into "
+             "the search query as text.")
+    if country_name == "🌍 Custom…":
+        country_name = st.text_input(
+            "Custom country", placeholder="e.g. Singapore, Germany, Nigeria")
+    city = st.text_input(
+        "City (optional)", placeholder="e.g. Dubai, Mumbai, London",
+        help="Added to the search query as text to bias results to this city.")
     target = st.number_input("Max results", 10, 500, 100, step=10)
 with c2:
     fol = st.slider("Follower range", 0, 2_000_000, (20_000, 100_000),
@@ -189,12 +198,30 @@ if go:
         st.error("Pick at least one coach type or add a custom keyword.")
         st.stop()
     coach_type = ", ".join(niches)
-    gl, label = COUNTRIES[country_name]
+    country_name = (country_name or "").strip()
+    if not country_name:
+        st.error("Enter a custom country (or pick one from the list).")
+        st.stop()
+    is_custom = country_name not in COUNTRIES
+    if is_custom:
+        # no Google region code for free-text countries -> default gl, and
+        # force the name into the query so it actually biases discovery.
+        gl = "us"
+        label = country_name.upper().replace(" ", "_")[:20]
+    else:
+        gl, label = COUNTRIES[country_name]
     lo, hi = fol
-    # discovery: inject the country NAME into the query (e.g. "... India ...")
-    geo_term = country_name if geo_in_query else ""
-    nf = no_filter or geo_in_query   # geo-in-query loses counts -> no filter
-    fc = label if (verify and strict_country) else None
+    # discovery: inject country NAME (and city) into the query as plain text
+    geo_bits = []
+    if geo_in_query or is_custom:
+        geo_bits.append(country_name)
+    if city.strip():
+        geo_bits.append(city.strip())
+    geo_term = " ".join(geo_bits)
+    nf = no_filter or bool(geo_term)   # geo-in-query loses counts -> no filter
+    # strict country match only works for known ISO codes (infer_country
+    # returns codes from config.yaml) — skip it for custom free-text countries.
+    fc = label if (verify and strict_country and not is_custom) else None
 
     status = st.empty()
     prog = st.progress(0.0)
