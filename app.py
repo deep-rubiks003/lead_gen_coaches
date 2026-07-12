@@ -71,6 +71,10 @@ COUNTRIES = {
     "United Kingdom": ("uk", "UK"), "Australia": ("au", "AU"),
     "New Zealand": ("nz", "NZ"), "South Africa": ("za", "ZA"),
     "India": ("in", "IN"), "Ireland": ("ie", "IE"),
+    # GCC
+    "Saudi Arabia": ("sa", "SA"), "United Arab Emirates": ("ae", "AE"),
+    "Qatar": ("qa", "QA"), "Kuwait": ("kw", "KW"),
+    "Bahrain": ("bh", "BH"), "Oman": ("om", "OM"),
 }
 
 # Coach types + keywords are loaded from keywords.yaml (edit there, no code

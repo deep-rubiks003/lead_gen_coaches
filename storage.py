@@ -16,7 +16,9 @@ COLS = ["handle", "name", "followers", "country", "url", "niche", "bio",
         "saved_at"]
 
 FLAGS = {"US": "🇺🇸", "CA": "🇨🇦", "UK": "🇬🇧", "AU": "🇦🇺",
-         "NZ": "🇳🇿", "ZA": "🇿🇦", "IN": "🇮🇳", "IE": "🇮🇪"}
+         "NZ": "🇳🇿", "ZA": "🇿🇦", "IN": "🇮🇳", "IE": "🇮🇪",
+         "SA": "🇸🇦", "AE": "🇦🇪", "QA": "🇶🇦", "KW": "🇰🇼",
+         "BH": "🇧🇭", "OM": "🇴🇲"}
 
 
 def _slug(text: str) -> str:

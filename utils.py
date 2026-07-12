@@ -122,12 +122,21 @@ CITY_COUNTRY = {
     "IN": ["mumbai", "delhi", "bangalore", "bengaluru", "hyderabad", "chennai",
            "pune", "kolkata", "ahmedabad", "gurgaon", "noida"],
     "IE": ["dublin", "cork", "galway"],
+    # GCC
+    "SA": ["riyadh", "jeddah", "mecca", "medina", "dammam", "khobar"],
+    "AE": ["dubai", "abu dhabi", "sharjah", "ajman", "uae"],
+    "QA": ["doha", "qatar"],
+    "KW": ["kuwait city", "kuwait"],
+    "BH": ["manama", "bahrain"],
+    "OM": ["muscat", "oman", "salalah"],
 }
 
 
 COUNTRY_NAMES = {
     "US": "USA", "UK": "UK", "CA": "Canada", "AU": "Australia",
     "NZ": "New Zealand", "ZA": "South Africa", "IN": "India", "IE": "Ireland",
+    "SA": "Saudi Arabia", "AE": "United Arab Emirates", "QA": "Qatar",
+    "KW": "Kuwait", "BH": "Bahrain", "OM": "Oman",
 }
 
 

@@ -22,6 +22,14 @@ icp:
     ZA: ["south africa", "🇿🇦", "johannesburg", "cape town"]
     AU: ["australia", "🇦🇺", "sydney", "melbourne"]
     NZ: ["new zealand", "🇳🇿", "auckland"]
+    IN: ["india", "🇮🇳", "mumbai", "delhi", "bangalore"]
+    IE: ["ireland", "🇮🇪", "dublin"]
+    SA: ["saudi arabia", "🇸🇦", "riyadh", "jeddah", "ksa"]
+    AE: ["united arab emirates", "uae", "🇦🇪", "dubai", "abu dhabi"]
+    QA: ["qatar", "🇶🇦", "doha"]
+    KW: ["kuwait", "🇰🇼"]
+    BH: ["bahrain", "🇧🇭", "manama"]
+    OM: ["oman", "🇴🇲", "muscat"]
 
 platforms:
   - instagram

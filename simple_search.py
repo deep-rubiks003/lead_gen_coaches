@@ -93,7 +93,7 @@ def harvest(niches: list[str], lo: int, hi: int, target: int = 100,
     # Discover broadly in both modes: verify hydrates all; non-verify (economy)
     # hydrates only the zero-follower rows. Either way we need the 0s captured.
     discover_no_filter = True
-    disc_cap = max(target * 4, 60)
+    disc_cap = max(target * 2, 60)
 
     queries = [(n, _mk(t, n)) for n in niches for t in TEMPLATES]
     log(f"{len(queries)} queries x up to {pages} pages | "
@@ -142,10 +142,13 @@ def harvest(niches: list[str], lo: int, hi: int, target: int = 100,
         r["followers"] = _fol(r["followers"])
 
     if verify and rows:
-        log(f"hydrating {len(rows)} profiles via Bright Data (followers + "
-            f"location)…")
-        profiles = brightdata_profile([r["handle"] for r in rows],
-                                      progress=progress)
+        # Single Bright Data collection for all handles (one snapshot = one
+        # startup latency; batching would multiply that). Generous max_wait so
+        # large snapshots still finish.
+        log(f"hydrating {len(rows)} profiles via Bright Data…")
+        profiles = brightdata_profile(
+            [r["handle"] for r in rows],
+            poll_secs=5, max_wait=900, progress=progress)
         kept = []
         for r in rows:
             p = profiles.get(r["handle"].lower())
